@@ -7,8 +7,8 @@ const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 
 //const socket = io('http://192.168.0.3:3001');
 const socket = io('http://143.248.199.209:3001');
-const minAngle = Math.PI / 3;
-const maxAngle = Math.PI * (5 / 3);
+const minAngle = Math.PI / 4;
+const maxAngle = 2 * Math.PI - minAngle;
 
 socket.on('connect', (arg) => {
   console.log('connected');
@@ -29,7 +29,7 @@ function draw(){
   textFont(FONT);
   textAlign(CENTER, CENTER);
   fill(BODY_SHADOW);
-  text("acceleration", width / 2, (height / 2) - (radius / 2) - BORDER);
+  text("acceleration", width / 2, (height / 2) - (radius / 2) - (textSizeDisp));
 
   noStroke();
   fill(BODY);
@@ -57,7 +57,7 @@ function draw(){
   pop();
 
   const distance = ((limitAngle - minAngle) * positionRadius).toFixed(2);
-  const distanceRange = (((4 / 3) * PI) * positionRadius).toFixed(2);
+  const distanceRange = ((maxAngle - minAngle) * positionRadius).toFixed(2);
   console.log(distance);
   socket.emit('horizontal', [distance, distanceRange]);
 };
@@ -65,5 +65,3 @@ function draw(){
 function windowResized(){
   resizeCanvas(window.innerWidth, window.innerHeight);
 };
-
-
