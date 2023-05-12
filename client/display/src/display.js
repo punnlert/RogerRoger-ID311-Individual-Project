@@ -1,10 +1,10 @@
 import '../css/style.css';
-import { sketch } from 'p5js-wrapper';
 import { BACKGROUND } from './constants';
 import { Rocket } from './rocket';
 import { Stars } from './background';
 import { io } from 'socket.io-client';
 
+import song from '../data/quin kiu (quinton sung) - OK Computer 8-bit - 03 Subterranean Homesick Alien (8-bit).mp3';
 
 //define variables
 //const socket = io('http://192.168.0.3:3001');
@@ -14,26 +14,31 @@ const upperBound = BORDER + window.innerHeight / 20;
 const lowerBound = window.innerHeight - BORDER - window.innerHeight / 20;
 let rocket;
 let stars;
+let themeSong;
 
 socket.on('connect', (arg) => {
   console.log('connected');
 });
 
-sketch.setup = function(){
+function preload(){
+  themeSong = loadSound(song);
+}
+
+function setup(){
   createCanvas(window.innerWidth, window.innerHeight);
   rocket = new Rocket(width / 2, lowerBound, width, height);
   stars = (new Stars(width, height));
+  themeSong.play();
   stars.generateStars();
 }
 
-sketch.draw= function(){
+function draw(){
   background(BACKGROUND);
   stars.drawStars();
   rocket.draw();
 }
 
-
-sketch.windowResized = function(){
+function windowResized(){
   resizeCanvas(window.innerWidth, window.innerHeight);
   stars.changeWidth(width);
   stars.changeHeigth(height);
@@ -52,3 +57,8 @@ socket.on('horizontal-display', function(data) {
   const xScaled = (x / srcWidth) * (width - rocket.getWidth() - 2 * BORDER);
   rocket.changeX(xScaled + BORDER + rocket.getWidth() / 2);
 })
+
+window.preload = preload;
+window.setup = setup;
+window.draw = draw;
+window.windowResized = windowResized;
