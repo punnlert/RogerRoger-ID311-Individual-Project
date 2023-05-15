@@ -8,6 +8,7 @@ class Rocket extends Subject{
         this.y = y;
         this.width = w / 10;
         this.height = h / 15;
+        this.lives = 10;
     }
 
     draw(){
@@ -23,7 +24,7 @@ class Rocket extends Subject{
         vertex(this.x - this.width / 2, this.y + this.height / 2);
         endShape();
 
-        this.notifySubscribers('rocketPosition', [this.x, this.y, this.width, this.height])
+        this.notifySubscribers('rocketPosition', this.x, this.y, this.width, this.height);
     }
 
     changeY(y){
@@ -47,6 +48,13 @@ class Rocket extends Subject{
         this.height = h / 15;
         this.x = w / 2;
         console.log('change');
+    }
+
+    update(src, ...other){
+        if (src == 'hit'){
+            this.lives -= 1;
+            console.log(this.lives);
+        }
     }
 }
 

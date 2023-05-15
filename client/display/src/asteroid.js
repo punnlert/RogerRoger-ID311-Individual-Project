@@ -1,37 +1,43 @@
-class Asteroid{
+import { Subject } from "./Subject";
+
+class Asteroid extends Subject{
     constructor(x, y, d){
+        super();
         this.x = x;
         this.y = y;
         this.diameter = d;
-        this.velocity = 2;
+        this.velocity = 6;
         this.color = '#ae3737';
+        this.hit = false;
     }
 
     draw(){
         noStroke();
         fill(this.color);
-        ellipse(this.x, this.y, this.diameter, this.diameter);
+        ellipse(this.x, this.y, this.diameter);
     }
 
     move(){
         this.x -= this.velocity;
     }
 
-    hitBox(x, y, w, h){
-        return (this.x <= x + w / 2 
-            || this.x + this.diameter >= x - w / 2
-            || this.y <= y + h / 2
-            || this.y + this.diameter <= y - h / 2);
+    isHit(x, y, w, h){
+        return (x + w / 2 > this.x - this.diameter / 2
+                && x - w / 2 < this.x + this.diameter / 2
+                && y + h / 2 > this.y - this.diameter / 2
+                && y - h / 2 < this.y + this.diameter / 2);
     }
 
     update(src, ...other){
         if (src == "rocketPosition"){
             const [x, y, w, h] = other;
-            // console.log(x, y, w, h);
-            if (this.hitBox(x, y, w, h)){
-                console.log('game over');
-            }
+
+            if (this.isHit(x, y, w, h) && !this.hit){
+                this.notifySubscribers('hit');
+                this.hit = true;
+            if (!this.isHit(x, y, w, h)) {this.hit =false}
             //make it disappear
+            }
         }
     }
 }
@@ -64,6 +70,7 @@ class AsteroidGroup{
     subscribeRocket(rocket){
         this.asteroid.forEach((elem) => {
             rocket.subscribe(elem);
+            elem.subscribe(rocket);
         })
     }
 }
