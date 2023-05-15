@@ -25,4 +25,8 @@ io.on('connection', (socket) => {
     socket.on('horizontal', (data) => {
       io.emit('horizontal-display', data);
     })
+
+    socket.on('fire', (data) => {
+      io.emit('shotFired');
+    })
 });

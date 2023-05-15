@@ -77,6 +77,10 @@ socket.on('horizontal-display', function(data) {
   rocket.changeX(xScaled + BORDER + rocket.getWidth() / 2);
 })
 
+socket.on('shotFired', (data) => {
+  console.log('fired');
+})
+
 window.preload = preload;
 window.setup = setup;
 window.draw = draw;
