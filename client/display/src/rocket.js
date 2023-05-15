@@ -6,6 +6,8 @@ class Rocket extends Subject{
         super();
         this.x = x;
         this.y = y;
+        this.windowWidth = w;
+        this.windowHeight = h;
         this.width = w / 10;
         this.height = h / 15;
     }
@@ -50,12 +52,12 @@ class Rocket extends Subject{
         this.width = w / 10;
         this.height = h / 15;
         this.x = w / 2;
-        console.log('change');
     }
 
     update(src, ...other){
         if (src == 'hit'){
-            console.log('hit');
+            const BORDER = 0.05 * Math.min(this.windowWidth, this.windowHeight);
+            this.x = (this.x - this.width > BORDER) ? (this.x - this.width) : (BORDER + this.width / 2);
         }
     }
 }

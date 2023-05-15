@@ -15,7 +15,7 @@ class Stars{
         for (let i = 0; i < this.numStars; i++){
             const positionX = (Math.random() * this.width);
             const positionY = (Math.random() * (this.height + 2 * this.maxRadius)) - this.maxRadius;
-            const radius = Math.random() * this.maxRadius;
+            const radius = (this.maxRadius / 2) + Math.random() * (this.maxRadius / 2);
             const velocity = radius * this.relativeVelocity;
             const star = {
                 x: positionX,
@@ -33,17 +33,18 @@ class Stars{
             else {
                 element.x = this.maxRadius + this.width;
                 element.y = (Math.random() * (this.height - 2 * this.maxRadius)) + this.maxRadius;
-                element.r = Math.random() * this.maxRadius;
+                element.r = (this.maxRadius / 2) + Math.random() * (this.maxRadius / 2);
                 element.v = element.r * this.relativeVelocity;
             }
         });
     }
 
     drawStars(){
+        noStroke();
         fill(BODY_SHADOW);
         this.stars.forEach((element) => {
             const { x, y, r} = element;
-            ellipse(x, y, r, r);
+            ellipse(x, y, r);
         });
         this.moveStars();
     }

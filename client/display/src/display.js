@@ -3,6 +3,7 @@ import { BACKGROUND } from './constants';
 import { Rocket } from './rocket';
 import { Stars } from './background';
 import { AsteroidGroup } from './asteroid';
+import { ScoreDisplay } from './scoreboard';
 import { io } from 'socket.io-client';
 
 import song from '../data/quin kiu (quinton sung) - OK Computer 8-bit - 03 Subterranean Homesick Alien (8-bit).mp3';
@@ -14,6 +15,7 @@ const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 const lowerBound = window.innerHeight - BORDER - window.innerHeight / 20;
 let rocket;
 let stars;
+let score;
 let themeSong;
 let asteroidGroup;
 
@@ -30,7 +32,8 @@ function setup(){
   rocket = new Rocket(width / 2, lowerBound, width, height);
   stars = new Stars(width, height);
   asteroidGroup = new AsteroidGroup(width, height);
-  asteroidGroup.subscribeRocket(rocket);
+  score = new ScoreDisplay();
+  asteroidGroup.subscribeEveryone(rocket, score);
   // themeSong.play();
   // themeSong.loop();
   stars.generateStars();
@@ -41,8 +44,10 @@ function draw(){
   stars.drawStars();
   rocket.draw();
   asteroidGroup.draw();
+  score.draw();
 }
 
+//debugging purposes
 function keyPressed(){
   if (key == ' '){
     noLoop();
