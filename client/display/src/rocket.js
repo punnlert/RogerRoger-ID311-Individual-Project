@@ -8,7 +8,6 @@ class Rocket extends Subject{
         this.y = y;
         this.width = w / 10;
         this.height = h / 15;
-        this.lives = 10;
     }
 
     draw(){
@@ -43,6 +42,10 @@ class Rocket extends Subject{
         return this.height;
     }
 
+    getLives(){
+        return this.lives;
+    }
+
     changeDimension(w, h){
         this.width = w / 10;
         this.height = h / 15;
@@ -52,8 +55,7 @@ class Rocket extends Subject{
 
     update(src, ...other){
         if (src == 'hit'){
-            this.lives -= 1;
-            console.log(this.lives);
+            console.log('hit');
         }
     }
 }

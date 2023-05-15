@@ -1,11 +1,14 @@
 import { Subject } from "./Subject";
+import { NUM_ASTEROID } from "./constants";
 
 class Asteroid extends Subject{
-    constructor(x, y, d){
+    constructor(x, y, w, h){
         super();
         this.x = x;
         this.y = y;
-        this.diameter = d;
+        this.windowWidth = w;
+        this.windowHeight = h;
+        this.diameter = Math.max(w, h) / NUM_ASTEROID;;
         this.velocity = 6;
         this.color = '#ae3737';
         this.hit = false;
@@ -18,7 +21,15 @@ class Asteroid extends Subject{
     }
 
     move(){
-        this.x -= this.velocity;
+        if (this.x + this.diameter / 2 < 0) {
+            const partitionY = this.windowHeight / NUM_ASTEROID;
+            const partitionX = this.windowWidth / NUM_ASTEROID;
+            const posX = this.windowWidth + (Math.random() * NUM_ASTEROID) * partitionX;
+            const posY = (Math.random() * NUM_ASTEROID) * partitionY;
+            this.x = posX;
+            this.y = posY;
+            console.log(posX, posY);
+        } else { this.x -= this.velocity; }
     }
 
     isHit(x, y, w, h){
@@ -35,7 +46,7 @@ class Asteroid extends Subject{
             if (this.isHit(x, y, w, h) && !this.hit){
                 this.notifySubscribers('hit');
                 this.hit = true;
-            if (!this.isHit(x, y, w, h)) {this.hit =false}
+            if (!this.isHit(x, y, w, h)) {this.hit = false}
             //make it disappear
             }
         }
@@ -45,17 +56,15 @@ class Asteroid extends Subject{
 class AsteroidGroup{
     constructor(w, h){
         this.asteroid = [];
-        this.numAsteroid = 10;
         this.windowWidth = w;
         this.windowHeight = h;
-        this.maxAsteroidDiameter = Math.max(w, h) / this.numAsteroid;
 
-        for (let i = 0; i < this.numAsteroid; i++){
-            const partitionY = this.windowHeight / this.numAsteroid;
-            const partitionX = this.windowWidth / this.numAsteroid;
-            const posX = this.windowWidth + (Math.random() * this.numAsteroid) * partitionX;
-            const posY = (Math.random() * this.numAsteroid) * partitionY;
-            const newAsteroid = new Asteroid(posX, posY, this.maxAsteroidDiameter);
+        for (let i = 0; i < NUM_ASTEROID; i++){
+            const partitionY = this.windowHeight / NUM_ASTEROID;
+            const partitionX = this.windowWidth / NUM_ASTEROID;
+            const posX = this.windowWidth + (Math.random() * NUM_ASTEROID) * partitionX;
+            const posY = (Math.random() * NUM_ASTEROID) * partitionY;
+            const newAsteroid = new Asteroid(posX, posY, w, h);
             this.asteroid.push(newAsteroid);
         }
     }
