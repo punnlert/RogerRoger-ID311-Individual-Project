@@ -43,6 +43,15 @@ function draw(){
   asteroidGroup.draw();
 }
 
+function keyPressed(){
+  if (key == ' '){
+    noLoop();
+  }
+  if (key == 'p'){
+    loop();
+  }
+}
+
 function windowResized(){
   resizeCanvas(window.innerWidth, window.innerHeight);
   stars.changeDimension(width, height)
@@ -67,3 +76,4 @@ window.preload = preload;
 window.setup = setup;
 window.draw = draw;
 window.windowResized = windowResized;
+window.keyPressed = keyPressed;
