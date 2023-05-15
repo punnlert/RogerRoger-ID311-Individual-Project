@@ -1,7 +1,9 @@
 import { BODY, BACKGROUND } from "./constants";
+import { Subject } from "./Subject";
 
-class Rocket {
+class Rocket extends Subject{
     constructor(x, y, w, h){
+        super();
         this.x = x;
         this.y = y;
         this.width = w / 10;
@@ -20,6 +22,8 @@ class Rocket {
         vertex(this.x - this.width / 3, this.y + this.height / 4);
         vertex(this.x - this.width / 2, this.y + this.height / 2);
         endShape();
+
+        this.notifySubscribers('rocketPosition', [this.x, this.y, this.width, this.height])
     }
 
     changeY(y){
@@ -36,6 +40,13 @@ class Rocket {
 
     getHeight(){
         return this.height;
+    }
+
+    changeDimension(w, h){
+        this.width = w / 10;
+        this.height = h / 15;
+        this.x = w / 2;
+        console.log('change');
     }
 }
 

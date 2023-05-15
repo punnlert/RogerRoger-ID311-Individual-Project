@@ -1,6 +1,5 @@
 class Bullet{
     constructor(width, height){
-        this.bullets = [];
         this.bulletLength = width / 10;
         this.bulletHeight = height / 20;
         this.bulletSpeed = 10;

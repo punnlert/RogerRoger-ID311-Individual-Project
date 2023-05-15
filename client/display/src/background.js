@@ -4,10 +4,10 @@ class Stars{
     constructor(width, height){
         this.width = width;
         this.height = height;
-        this.numStars = 60;
-        this.maxRadius = (Math.max(this.width, this.height) / this.numStars) * 0.2;
+        this.numStars = 100;
+        this.maxRadius = (Math.max(this.width, this.height) / this.numStars) * 0.5;
         this.stars = [];
-        this.velocity = 6;
+        this.velocity = 4;
         this.relativeVelocity = this.velocity / this.maxRadius;
     }
 
@@ -48,12 +48,8 @@ class Stars{
         this.moveStars();
     }
 
-    changeWidth(width){
+    changeDimension(width, height){
         this.width = width;
-        this.maxRadius = (Math.max(this.width, this.height) / this.numStars) * 0.2;
-    }
-
-    changeHeight(height){
         this.height = height;
         this.maxRadius = (Math.max(this.width, this.height) / this.numStars) * 0.2;
     }

@@ -5,7 +5,7 @@ const BODY_SHADOW = "#64925E";
 const FONT = "Helvetica";
 
 //const socket = io('http://192.168.0.3:3001');
-const socket = io('http://143.248.199.209:3001');
+const socket = io('http://143.248.199.30:3001');
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 const upperBound = BORDER + window.innerHeight / 20;
 const lowerBound = window.innerHeight - BORDER - window.innerHeight / 20;
