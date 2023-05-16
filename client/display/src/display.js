@@ -6,6 +6,7 @@ import { AsteroidGroup } from './asteroid';
 import { ScoreDisplay } from './scoreboard';
 import { io } from 'socket.io-client';
 
+import arcadeFont from '../data/ARCADE.otf';
 import song from '../data/quin kiu (quinton sung) - OK Computer 8-bit - 03 Subterranean Homesick Alien (8-bit).mp3';
 
 //define variables
@@ -17,6 +18,7 @@ let rocket;
 let stars;
 let score;
 let themeSong;
+let font;
 let asteroidGroup;
 
 socket.on('connect', (arg) => {
@@ -25,6 +27,7 @@ socket.on('connect', (arg) => {
 
 function preload(){
   themeSong = loadSound(song);
+  font = loadFont(arcadeFont)
 }
 
 function setup(){
@@ -32,7 +35,7 @@ function setup(){
   rocket = new Rocket(width / 2, lowerBound, width, height);
   stars = new Stars(width, height);
   asteroidGroup = new AsteroidGroup(width, height);
-  score = new ScoreDisplay();
+  score = new ScoreDisplay(font);
   asteroidGroup.subscribeEveryone(rocket, score);
   // themeSong.play();
   // themeSong.loop();

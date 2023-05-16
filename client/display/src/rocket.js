@@ -10,6 +10,7 @@ class Rocket extends Subject{
         this.windowHeight = h;
         this.width = w / 10;
         this.height = h / 15;
+        this.bullet = null;
     }
 
     draw(){
@@ -44,8 +45,25 @@ class Rocket extends Subject{
         return this.height;
     }
 
-    getLives(){
-        return this.lives;
+    fire(){
+        this.bullet = {
+            x: this.x,
+            y: this.y,
+            w: this.width,
+            h: this.height / 5,
+            v: this.windowWidth / 10
+        };
+    }
+
+    drawBullet(){
+        const bullet = this.bullet;
+        const x = bullet.x;
+        const y = bullet.y;
+        const w = bullet.w;
+        const h = bullet.h;
+
+        //make bullet
+
     }
 
     changeDimension(w, h){

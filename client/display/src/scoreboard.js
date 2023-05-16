@@ -1,21 +1,22 @@
 import { LIVES, FONT, BODY, LIVES_COLOR} from "./constants";
 
 class ScoreDisplay{
-    constructor(){
+    constructor(font){
         this.live = LIVES;
         this.score = 0;
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
         this.BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
-        this.fontSize = this.BORDER;
+        this.fontSize = 2 * this.BORDER;
+        this.font = font;
         this.livesDiameter = this.BORDER / 2;
     }
 
-    draw(){
+    async draw(){
         noStroke();
 
-        const display = `score: ${this.score}`
-        textFont(FONT);
+        const display = `${this.score}`
+        textFont(this.font);
         textSize(this.fontSize);
         textAlign(LEFT, TOP);
         fill(BODY);
@@ -33,8 +34,6 @@ class ScoreDisplay{
     reduceLive(){
         this.live = (this.live > 0) ? (this.live - 1) : 0; 
     }
-
-
 
     update(src, ...other){
         if (src == 'hit'){
