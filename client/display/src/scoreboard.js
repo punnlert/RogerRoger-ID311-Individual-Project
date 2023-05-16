@@ -38,12 +38,20 @@ class ScoreDisplay extends Subject{
         this.live = (this.live > 0) ? (this.live - 1) : 0; 
     }
 
+    getLive(){
+        return this.live;
+    }
+
     addScore(score){
         this.score += Math.floor(score);
         if (Math.floor(this.score / 100) > this.stage){
             this.stage++;
             this.notifySubscribers('stateChange', this.stage);
         }
+    }
+
+    getScore(){
+        return this.score;
     }
 
     update(src, ...other){

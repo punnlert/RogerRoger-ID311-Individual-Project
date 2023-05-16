@@ -1,5 +1,5 @@
 import '../css/style.css';
-import { BACKGROUND } from './constants';
+import { BACKGROUND, BODY } from './constants';
 import { Rocket } from './rocket';
 import { Stars } from './background';
 import { AsteroidGroup } from './asteroid';
@@ -20,6 +20,9 @@ let score;
 let themeSong;
 let font;
 let asteroidGroup;
+let screenState;
+let maxTextSize = 0.15 * Math.min(window.innerWidth, window.innerHeight);
+let textSizeDisplay = 0.1 * maxTextSize;
 
 socket.on('connect', (arg) => {
   console.log('connected');
@@ -40,23 +43,63 @@ function setup(){
   // themeSong.play();
   // themeSong.loop();
   stars.generateStars();
+  screenState = 0;
 }
 
 function draw(){
   background(BACKGROUND);
   stars.drawStars();
-  rocket.draw();
-  asteroidGroup.draw();
-  score.draw();
+
+  if (screenState == 0){
+    textFont(font);
+    textSize(maxTextSize);
+    textAlign(CENTER, CENTER);
+    fill(BODY);
+    text("ROGER, ROGER", width / 2, height / 4);
+
+    textSize(maxTextSize / 2);
+    text("press space", width / 2, 3 * height / 4);
+  }
+  if (screenState == 1){
+    rocket.draw();
+    asteroidGroup.draw();
+    score.draw();
+    if (score.getLive() == 0){
+      screenState = 2;
+    }
+  }
+  if (screenState == 2){
+    textFont(font);
+    textSize(textSizeDisplay);
+    textAlign(CENTER, CENTER);
+    fill(BODY);
+    text("GAME OVER", width / 2, height / 4);
+    animateTextSize();
+
+    textSize(maxTextSize / 2);
+    fill(BODY);
+    text(`score: ${score.getScore()}`, width / 2, 3 * height / 4)
+  }
 }
 
 //debugging purposes
 function keyPressed(){
-  if (key == ' '){
-    noLoop();
+  if (screenState == 0){
+    if (key == ' '){
+      screenState = 1;
+    }
   }
-  if (key == 'p'){
-    loop();
+
+  if (screenState == 2){
+    if (key == ' '){
+      rocket = new Rocket(width / 2, lowerBound, width, height);
+      stars = new Stars(width, height);
+      asteroidGroup = new AsteroidGroup(width, height);
+      score = new ScoreDisplay(font);
+      asteroidGroup.subscribeEveryone(rocket, score);
+      stars.generateStars();
+      screenState = 0;
+    }
   }
 }
 
@@ -66,6 +109,10 @@ function windowResized(){
   rocket.changeDimension(width, height);
   score.changeDimension(width, height);
   asteroidGroup.changeDimension(width, height);
+}
+
+function animateTextSize(){
+  textSizeDisplay = (1.1 * textSizeDisplay < maxTextSize) ? (1.1 * textSizeDisplay) : maxTextSize;
 }
 
 socket.on('vertical-display', function(data) {
