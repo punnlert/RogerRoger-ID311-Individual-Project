@@ -1,4 +1,4 @@
-import { LIVES, FONT, BODY, LIVES_COLOR} from "./constants";
+import { LIVES, BODY, LIVES_COLOR} from "./constants";
 
 class ScoreDisplay{
     constructor(font){
@@ -12,7 +12,7 @@ class ScoreDisplay{
         this.livesDiameter = this.BORDER / 2;
     }
 
-    async draw(){
+    draw(){
         noStroke();
 
         const display = `${this.score}`
