@@ -59,8 +59,10 @@ function keyPressed(){
 
 function windowResized(){
   resizeCanvas(window.innerWidth, window.innerHeight);
-  stars.changeDimension(width, height)
+  stars.changeDimension(width, height);
   rocket.changeDimension(width, height);
+  score.changeDimension(width, height);
+  asteroidGroup.changeDimension(width, height);
 }
 
 socket.on('vertical-display', function(data) {

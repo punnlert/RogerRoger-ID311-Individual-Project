@@ -7,6 +7,7 @@ const LIVES_COLOR = "#ae3737";
 const FONT = "Helvetica";
 const LIVES = 10;
 const NUM_ASTEROID = 10;
+const MAX_VELOCITY = 6;
 
 export { 
     BACKGROUND ,
@@ -17,5 +18,6 @@ export {
     LIVES_COLOR,
     NUM_ASTEROID,
     LIVES,
-    FONT
+    FONT,
+    MAX_VELOCITY
 }

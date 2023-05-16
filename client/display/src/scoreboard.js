@@ -34,10 +34,17 @@ class ScoreDisplay{
         this.live = (this.live > 0) ? (this.live - 1) : 0; 
     }
 
+
+
     update(src, ...other){
         if (src == 'hit'){
             this.reduceLive();
         }
+    }
+
+    changeDimension(w, h){
+        this.windowWidth = w;
+        this.windowHeight = h;
     }
 }
 
