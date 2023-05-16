@@ -2,14 +2,14 @@ import { Subject } from "./Subject";
 import { NUM_ASTEROID, ASTEROID_COLOR, BACKGROUND } from "./constants";
 
 class Asteroid extends Subject{
-    constructor(x, y, w, h){
+    constructor(x, y, w, h, v){
         super();
         this.x = x;
         this.y = y;
         this.windowWidth = w;
         this.windowHeight = h;
         this.diameter = Math.max(w, h) / NUM_ASTEROID;;
-        this.velocity = 6;
+        this.velocity = v;
         this.color = ASTEROID_COLOR;
         this.hit = false;
     }
@@ -63,13 +63,15 @@ class AsteroidGroup{
         this.asteroid = [];
         this.windowWidth = w;
         this.windowHeight = h;
+        this.maxVelocity = 6;
 
         for (let i = 0; i < NUM_ASTEROID; i++){
             const partitionY = this.windowHeight / NUM_ASTEROID;
             const partitionX = this.windowWidth / NUM_ASTEROID;
             const posX = this.windowWidth + (Math.random() * NUM_ASTEROID) * partitionX;
             const posY = (Math.random() * NUM_ASTEROID) * partitionY;
-            const newAsteroid = new Asteroid(posX, posY, w, h);
+            const velocity = (this.maxVelocity / 2) + (Math.random() * this.maxVelocity / 2);
+            const newAsteroid = new Asteroid(posX, posY, w, h, velocity);
             this.asteroid.push(newAsteroid);
         }
     }

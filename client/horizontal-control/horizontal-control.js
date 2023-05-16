@@ -6,7 +6,7 @@ const FONT = "Helvetica";
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 
 //const socket = io('http://192.168.0.3:3001');
-const socket = io('http://143.248.199.209:3001');
+const socket = io('http://143.248.199.54:3001');
 const minAngle = Math.PI / 4;
 const maxAngle = 2 * Math.PI - minAngle;
 

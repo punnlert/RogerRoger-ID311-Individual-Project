@@ -10,7 +10,7 @@ import song from '../data/quin kiu (quinton sung) - OK Computer 8-bit - 03 Subte
 
 //define variables
 //const socket = io('http://192.168.0.3:3001');
-const socket = io('http://143.248.199.30:3001');
+const socket = io('http://143.248.199.54:3001');
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 const lowerBound = window.innerHeight - BORDER - window.innerHeight / 20;
 let rocket;
