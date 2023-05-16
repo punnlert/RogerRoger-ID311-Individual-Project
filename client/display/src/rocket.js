@@ -1,4 +1,4 @@
-import { BODY, BACKGROUND } from "./constants";
+import { BODY, BACKGROUND, LIVES_COLOR } from "./constants";
 import { Subject } from "./Subject";
 
 class Rocket extends Subject{
@@ -14,6 +14,9 @@ class Rocket extends Subject{
     }
 
     draw(){
+
+        if (this.bulletIsFire()) {this.drawBullet();}
+
         noStroke();
         fill(BODY);
         beginShape();
@@ -46,24 +49,49 @@ class Rocket extends Subject{
     }
 
     fire(){
-        this.bullet = {
-            x: this.x,
-            y: this.y,
-            w: this.width,
-            h: this.height / 5,
-            v: this.windowWidth / 10
-        };
+        if (!this.bulletIsFire()){
+            this.bullet = {
+                x: this.x,
+                y: this.y,
+                w: this.width * 0.1,
+                h: this.height / 10,
+                v: this.windowWidth / 10,
+                wMax: this.width,
+                maxRange: (this.windowWidth / 4) + Math.random() * this.windowWidth / 2
+            };
+        }
+    }
+
+    bulletIsFire(){
+        if (this.bullet) {return true;}
+        return false;
     }
 
     drawBullet(){
-        const bullet = this.bullet;
-        const x = bullet.x;
-        const y = bullet.y;
-        const w = bullet.w;
-        const h = bullet.h;
+        if (this.bulletIsFire()){
+            const {x, y, w, h} = this.bullet;
+    
+            //make bullet
+            noStroke();
+            fill(LIVES_COLOR);
+            rect(x, y, w, h / 2);
+            rect(x, y - h / 2, w, h / 2);
+    
+            this.notifySubscribers('bulletPosition', x, y, w, h);
+            this.moveBullet();
+        }
+    }
 
-        //make bullet
-
+    moveBullet(){
+        if (this.bulletIsFire()){
+            const bullet = this.bullet;
+            if (bullet.x <  this.x + bullet.maxRange) {
+                bullet.w = (bullet.w**2 <= bullet.wMax) ? (bullet.w**2) : (bullet.wMax);
+                bullet.x += bullet.v;
+            } else {
+                this.bullet = null;
+            }
+        }
     }
 
     changeDimension(w, h){
@@ -76,6 +104,9 @@ class Rocket extends Subject{
         if (src == 'hit'){
             const BORDER = 0.05 * Math.min(this.windowWidth, this.windowHeight);
             this.x = (this.x - this.width > BORDER) ? (this.x - this.width) : (BORDER + this.width / 2);
+        }
+        if (src == 'bulletHit') {
+            this.bullet = null;
         }
     }
 }

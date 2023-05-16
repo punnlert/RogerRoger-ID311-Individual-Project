@@ -8,8 +8,10 @@ class Asteroid extends Subject{
         this.y = y;
         this.windowWidth = w;
         this.windowHeight = h;
-        this.diameter = Math.max(w, h) / (2 * NUM_ASTEROID) + (Math.random() * Math.max(w, h) / (2 * NUM_ASTEROID));
-        this.velocity = (MAX_VELOCITY / 2) + (Math.random() * MAX_VELOCITY / 2);
+        this.diameter = Math.max(w, h) / (NUM_ASTEROID) + (Math.random() * Math.max(w, h) / (NUM_ASTEROID));
+        this.score =  (this.diameter / (Math.max(w, h) / (NUM_ASTEROID))) * 10;
+        this.maxVelocity = MAX_VELOCITY;
+        this.velocity = (this.maxVelocity / 2) + (Math.random() * this.maxVelocity / 2);
         this.color = ASTEROID_COLOR;
         this.hit = false;
     }
@@ -27,13 +29,20 @@ class Asteroid extends Subject{
         } else { this.x -= this.velocity; }
     }
 
+    changeVelocity(delta){
+        this.maxVelocity += delta;
+        console.log(this.maxVelocity);
+    }
+
     restartPosition(){
         const partitionY = this.windowHeight / NUM_ASTEROID;
         const partitionX = this.windowWidth / NUM_ASTEROID;
         const posX = this.windowWidth + this.diameter + (Math.random() * NUM_ASTEROID) * partitionX;
         const posY = (Math.random() * NUM_ASTEROID) * partitionY;
 
-        this.velocity = (MAX_VELOCITY / 2) + (Math.random() * MAX_VELOCITY / 2);
+        this.diameter = Math.max(this.windowWidth, this.windowHeight) / (NUM_ASTEROID) + (Math.random() * Math.max(this.windowWidth, this.windowHeight) / (NUM_ASTEROID));
+        this.velocity = (this.maxVelocity / 2) + (Math.random() * this.maxVelocity / 2);
+        this.score =  (this.diameter / (Math.max(this.windowWidth, this.windowHeight) / (NUM_ASTEROID))) * 10;
         this.x = posX;
         this.y = posY;
     }
@@ -55,7 +64,17 @@ class Asteroid extends Subject{
             const [x, y, w, h] = other;
 
             if (this.isHit(x, y, w, h) && !this.hit){
+                this.restartPosition();
                 this.notifySubscribers('hit');
+                this.hit = true;
+            if (!this.isHit(x, y, w, h)) {this.hit = false}
+            }
+        }
+        if (src == "bulletPosition"){
+            const [x, y, w, h] = other;
+
+            if (this.isHit(x, y, w, h) && !this.hit){
+                this.notifySubscribers('bulletHit', this.score);
                 this.restartPosition();
                 this.hit = true;
             if (!this.isHit(x, y, w, h)) {this.hit = false}
@@ -87,18 +106,32 @@ class AsteroidGroup{
         });
     }
 
+    changeVelocity(delta){
+        this.asteroid.forEach((elem) => {
+            elem.changeVelocity(delta);
+        })
+    }
+
     subscribeEveryone(rocket, scoreboard){
         this.asteroid.forEach((elem) => {
             rocket.subscribe(elem);
             elem.subscribe(rocket);
             elem.subscribe(scoreboard);
         })
+        scoreboard.subscribe(this);
     }
 
     changeDimension(w, h){
         this.asteroid.forEach((elem) => {
             elem.changeDimension(w, h);
         })
+    }
+
+    update(src, ...other){
+        if (src == 'stateChange') {
+            const [deltaVel] = other; 
+            this.changeVelocity(0.5);
+        } 
     }
 }
 

@@ -1,7 +1,9 @@
 import { LIVES, BODY, LIVES_COLOR} from "./constants";
+import { Subject } from "./Subject";
 
-class ScoreDisplay{
+class ScoreDisplay extends Subject{
     constructor(font){
+        super();
         this.live = LIVES;
         this.score = 0;
         this.windowWidth = window.innerWidth;
@@ -10,6 +12,7 @@ class ScoreDisplay{
         this.fontSize = 2 * this.BORDER;
         this.font = font;
         this.livesDiameter = this.BORDER / 2;
+        this.stage = 0;
     }
 
     draw(){
@@ -35,9 +38,21 @@ class ScoreDisplay{
         this.live = (this.live > 0) ? (this.live - 1) : 0; 
     }
 
+    addScore(score){
+        this.score += Math.floor(score);
+        if (Math.floor(this.score / 100) > this.stage){
+            this.stage++;
+            this.notifySubscribers('stateChange', this.stage);
+        }
+    }
+
     update(src, ...other){
         if (src == 'hit'){
             this.reduceLive();
+        }
+        if (src == 'bulletHit'){
+            const [ score ] = other;
+            this.addScore(Math.floor(score));
         }
     }
 
