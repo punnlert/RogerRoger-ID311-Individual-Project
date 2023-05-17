@@ -5,17 +5,33 @@ const BODY_SHADOW = "#64925E";
 const FONT = "Helvetica";
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 
-//const socket = io('http://192.168.0.3:3001');
-const socket = io('http://143.248.199.79:3001');
+const socket = io('http://localhost:3001', {
+  reconnection: false,
+  autoConnect: false
+});
+
 const minAngle = Math.PI / 4;
 const maxAngle = 2 * Math.PI - minAngle;
+let connect = false;
+let input;
+let button;
 
 socket.on('connect', (arg) => {
-  console.log('connected');
+  connect = true;
 });
+
+socket.on('disconnect', (arg) => {
+  connect = false;
+})
 
 function setup(){
   createCanvas(window.innerWidth, window.innerHeight);
+  input = createInput().position(BORDER, BORDER);
+  button = createButton('submit').position(input.x + input.width + BORDER / 2, BORDER).mousePressed(() => {
+    socket.disconnect();
+    socket.io.uri = `http://${input.value()}:3001`;
+    socket.connect();
+  })
 }
 
 function draw(){
@@ -25,6 +41,13 @@ function draw(){
   const positionRadius = (radius / 2) - (smallRadius / 1.5);
 
   background(BACKGROUND);
+
+  if (connect) {
+    fill(BODY);
+    ellipse(input.x + input.width + (BORDER / 2) + button.width + (BORDER / 2),
+            input.y + input.height / 2, input.height / 2);
+  }
+
   textSize(textSizeDisp);
   textFont(FONT);
   textAlign(CENTER, CENTER);
@@ -58,7 +81,6 @@ function draw(){
 
   const distance = ((limitAngle - minAngle) * positionRadius).toFixed(2);
   const distanceRange = ((maxAngle - minAngle) * positionRadius).toFixed(2);
-  console.log(distance);
   socket.emit('horizontal', [distance, distanceRange]);
 };
 

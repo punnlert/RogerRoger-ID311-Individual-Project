@@ -12,7 +12,7 @@ import song from '../data/quin kiu (quinton sung) - OK Computer 8-bit - 03 Subte
 
 //define variables
 //const socket = io('http://192.168.0.3:3001');
-const socket = io('http://192.249.22.123:3001');
+const socket = io('http://localhost:3001');
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 const lowerBound = window.innerHeight - BORDER - window.innerHeight / 20;
 let rocket;
@@ -25,11 +25,10 @@ let screenState;
 let maxTextSize = 0.15 * Math.min(window.innerWidth, window.innerHeight);
 let textSizeDisplay = 0.1 * maxTextSize;
 let IPAddress = "loading..";
-let boardDisplay = []
+let highscore;
 
 socket.on('connect', (arg) => {
   socket.emit('getIP');
-  console.log('connected');
   socket.on('IP-address', (data) => { 
     IPAddress = data; 
   });
@@ -51,7 +50,13 @@ function setup(){
   // themeSong.loop();
   stars.generateStars();
   screenState = 0;
-  // socket.emit('load-score', (data));
+  socket.emit('load-score', (data) => {
+    try {
+      highscore = data.score;
+    } catch (error) {
+      highscore = 0;
+    }
+  });
 }
 
 function draw(){
@@ -87,9 +92,19 @@ function draw(){
     text("GAME OVER", width / 2, height / 4);
     animateTextSize();
 
-    textSize(maxTextSize / 2);
-    fill(BODY);
-    text(`score: ${score.getScore()}`, width / 2, 3 * height / 4)
+    if (score.getScore() > highscore){
+      textSize(maxTextSize / 2);
+      fill(BODY);
+      text(`score: ${score.getScore()}`, width / 2, height / 2);
+      text(`new highscore!`, width / 2, 3 * height / 4);
+      socket.emit('save-score', {score: score.getScore()});
+    } else {
+      textSize(maxTextSize / 2);
+      fill(BODY);
+      text(`highscore: ${highscore}`, width / 2, height / 2);
+      text(`score: ${score.getScore()}`, width / 2, 3 * height / 4);
+    }
+
   }
 }
 

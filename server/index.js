@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('load-score', () => {
-      fs.readFile('leaderboard.json', utf8, (err, data) => {
+      fs.readFile('leaderboard.json', "utf8", (err, data) => {
         if (err) {
           console.log(err);
         }
