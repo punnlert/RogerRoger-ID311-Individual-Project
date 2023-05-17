@@ -6,12 +6,13 @@ import { AsteroidGroup } from './asteroid';
 import { ScoreDisplay } from './scoreboard';
 import { io } from 'socket.io-client';
 
+
 import arcadeFont from '../data/ARCADE.otf';
 import song from '../data/quin kiu (quinton sung) - OK Computer 8-bit - 03 Subterranean Homesick Alien (8-bit).mp3';
 
 //define variables
 //const socket = io('http://192.168.0.3:3001');
-const socket = io('http://143.248.199.79:3001');
+const socket = io('http://192.249.22.123:3001');
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 const lowerBound = window.innerHeight - BORDER - window.innerHeight / 20;
 let rocket;
@@ -23,9 +24,15 @@ let asteroidGroup;
 let screenState;
 let maxTextSize = 0.15 * Math.min(window.innerWidth, window.innerHeight);
 let textSizeDisplay = 0.1 * maxTextSize;
+let IPAddress = "loading..";
+let boardDisplay = []
 
 socket.on('connect', (arg) => {
+  socket.emit('getIP');
   console.log('connected');
+  socket.on('IP-address', (data) => { 
+    IPAddress = data; 
+  });
 });
 
 function preload(){
@@ -44,6 +51,7 @@ function setup(){
   // themeSong.loop();
   stars.generateStars();
   screenState = 0;
+  // socket.emit('load-score', (data));
 }
 
 function draw(){
@@ -56,6 +64,9 @@ function draw(){
     textAlign(CENTER, CENTER);
     fill(BODY);
     text("ROGER, ROGER", width / 2, height / 4);
+
+    textSize(maxTextSize / 3);
+    text(`${IPAddress}`, width / 2, height / 2);
 
     textSize(maxTextSize / 2);
     text("press space", width / 2, 3 * height / 4);

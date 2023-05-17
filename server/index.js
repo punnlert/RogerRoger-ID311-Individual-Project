@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const fs = require('fs');
 
 // Create a server on port 5500
 const port = process.env.PORT || 3001;
@@ -28,5 +29,37 @@ io.on('connection', (socket) => {
 
     socket.on('fire', (data) => {
       io.emit('shotFired');
+    })
+
+    socket.on('save-score', (data) => {
+      fs.writeFile(
+        'leaderboard.json',
+        JSON.stringify(data),
+        (err, file) => {
+          if (err) {throw err};
+        }
+      )
+    })
+
+    socket.on('load-score', () => {
+      fs.readFile('leaderboard.json', utf8, (err, data) => {
+        if (err) {
+          console.log(err);
+        }
+        try {
+          const toSend = JSON.parse(data)
+          io.emit('data', toSend);
+        } catch (err) {
+          io.emit('data', []);
+        }
+      })
+    })
+
+    socket.on('getIP', async () => {
+      const ipRegex = /[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/
+      const IP = fetch('https://www.cloudflare.com/cdn-cgi/trace').then(res => (res.text())).then((data) => {
+        let ip = data.match(ipRegex)[0];
+        socket.emit('IP-address', ip);
+      });
     })
 });
