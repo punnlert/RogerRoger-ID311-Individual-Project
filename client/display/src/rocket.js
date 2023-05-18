@@ -2,6 +2,9 @@ import { BODY, BACKGROUND, LIVES_COLOR } from "./constants";
 import { Subject } from "./Subject";
 import shot from "../data/mixkit-short-laser-gun-shot-1670.wav";
 
+const cooldownPeriod = 2000;
+let cooldownDone = true;
+
 class Rocket extends Subject{
     constructor(x, y, w, h){
         super();
@@ -51,7 +54,7 @@ class Rocket extends Subject{
     }
 
     fire(){
-        if (!this.bulletIsFire()){
+        if (!this.bulletIsFire() && cooldownDone){
             this.laserShot.play();
             this.bullet = {
                 x: this.x,
@@ -62,6 +65,11 @@ class Rocket extends Subject{
                 wMax: this.width,
                 maxRange: (this.windowWidth / 4) + Math.random() * this.windowWidth / 2
             };
+            cooldownDone = false;
+            setTimeout(() => {
+                cooldownDone = true;
+                console.log('cooldownDone');
+            }, cooldownPeriod);
         }
     }
 
@@ -88,7 +96,7 @@ class Rocket extends Subject{
     moveBullet(){
         if (this.bulletIsFire()){
             const bullet = this.bullet;
-            if (bullet.x <  this.x + bullet.maxRange) {
+            if (bullet.x <  this.x + bullet.maxRange && bullet.x < this.windowWidth) {
                 bullet.w = (bullet.w**2 <= bullet.wMax) ? (bullet.w**2) : (bullet.wMax);
                 bullet.x += bullet.v;
             } else {

@@ -72,13 +72,20 @@ function draw(){
     text("ROGER, ROGER", width / 2, height / 4);
 
     textSize(maxTextSize / 3);
-    text(`please go to ${IPAddress}:5500`, width / 2, (height / 2) - maxTextSize / 2);
-    text(`and type '${IPAddress}'`, width / 2, height / 2);
+    if (IPAddress == 'loading..'){
+      text(`${IPAddress}`, width / 2, height / 2);
+    } else {
+      text(`please go to ${IPAddress}:5500`, width / 2, (height / 2) - maxTextSize / 2);
+      text(`and type '${IPAddress}'`, width / 2, height / 2);
+    }
 
     textSize(maxTextSize / 2);
     text("press space", width / 2, 3 * height / 4);
   }
   if (screenState == 1){
+    //bug fix purposes
+    rocket.changeX(mouseX);
+    rocket.changeY(mouseY);
     rocket.draw();
     asteroidGroup.draw();
     score.draw();
@@ -114,6 +121,9 @@ function draw(){
 
 //debugging purposes
 function keyPressed(){
+  //bug fixes purpose
+  if (key == 's'){rocket.fire()}
+
   if (screenState == 0){
     if (key == ' '){
       screenState = 1;

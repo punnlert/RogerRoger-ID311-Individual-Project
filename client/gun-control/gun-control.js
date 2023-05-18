@@ -6,6 +6,9 @@ const BODY = "#89C06E";
 const TEXT_OFF = "#7a1818";
 const FONT = "Helvetica";
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
+const COOLDOWN = 2000;
+
+let cooldownDone = true;
 
 const socket = io('http://localhost:3001', {
   reconnection: false,
@@ -67,16 +70,24 @@ function drawButton(){
 }
 
 function touchStarted(){
-  if (mouseX < width - BORDER && mouseX > BORDER && mouseY < height - BORDER && mouseY > 2 * BORDER){
+  if (mouseX < width - BORDER && mouseX > BORDER && mouseY < height - BORDER && mouseY > 2 * BORDER && cooldownDone){
+    cooldownDone = false;
     color = BUTTON_ON;
     textColor = TEXT_OFF;
     socket.emit('fire');
+    setTimeout(() => {
+      color = BUTTON_OFF;
+      textColor = BUTTON_ON;
+      cooldownDone = true
+    }, COOLDOWN);
   }
 }
 
 function touchEnded(){
-  color = BUTTON_OFF;
-  textColor = BUTTON_ON;
+  if (cooldownDone){
+    color = BUTTON_OFF;
+    textColor = BUTTON_ON;
+  }
 }
 
 function windowResized(){
