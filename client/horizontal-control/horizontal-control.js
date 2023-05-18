@@ -27,7 +27,7 @@ socket.on('disconnect', (arg) => {
 function setup(){
   createCanvas(window.innerWidth, window.innerHeight);
   input = createInput().position(BORDER, BORDER);
-  button = createButton('submit').position(input.x + input.width + BORDER / 2, BORDER).mousePressed(() => {
+  button = createButton('connect').position(input.x + input.width + BORDER / 2, BORDER).mousePressed(() => {
     socket.disconnect();
     socket.io.uri = `http://${input.value()}:3001`;
     socket.connect();

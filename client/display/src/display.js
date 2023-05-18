@@ -72,7 +72,8 @@ function draw(){
     text("ROGER, ROGER", width / 2, height / 4);
 
     textSize(maxTextSize / 3);
-    text(`${IPAddress}`, width / 2, height / 2);
+    text(`please go to ${IPAddress}:5500`, width / 2, (height / 2) - maxTextSize / 2);
+    text(`and type '${IPAddress}'`, width / 2, height / 2);
 
     textSize(maxTextSize / 2);
     text("press space", width / 2, 3 * height / 4);
@@ -129,6 +130,8 @@ function keyPressed(){
       asteroidGroup.subscribeEveryone(rocket, score);
       stars.generateStars();
       screenState = 0;
+      themeSong.stop();
+      themeSong.play();
       socket.emit('load-score');
     }
   }

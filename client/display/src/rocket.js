@@ -1,5 +1,6 @@
 import { BODY, BACKGROUND, LIVES_COLOR } from "./constants";
 import { Subject } from "./Subject";
+import shot from "../data/mixkit-short-laser-gun-shot-1670.wav";
 
 class Rocket extends Subject{
     constructor(x, y, w, h){
@@ -11,6 +12,7 @@ class Rocket extends Subject{
         this.width = w / 10;
         this.height = h / 15;
         this.bullet = null;
+        this.laserShot = loadSound(shot);
     }
 
     draw(){
@@ -50,6 +52,7 @@ class Rocket extends Subject{
 
     fire(){
         if (!this.bulletIsFire()){
+            this.laserShot.play();
             this.bullet = {
                 x: this.x,
                 y: this.y,
