@@ -21,7 +21,7 @@ Socket connection input lets the player input the IP address of the server to ga
 <!-- pictures -->
 
 ## The game mechanics
-Player navigate through the group of asteroids. if they get hit, their lives decreases. they get points for shooting the asteroid depending on the size of it. But the velocity increase with the score. The gun have a cooldown period of two seconds so players have to be conservative about their shooting. 
+Player navigate through the group of asteroids. if they get hit, their lives decreases. they get points for shooting the asteroid depending on the size of it. But the velocity increase with the score. The gun have a cooldown period of two seconds so players have to be conservative about their shooting. You can collect some lives as you go and save yourselves from dying.
 
 ## Software
 The game use node to host the server, P5JS to draw the graphics, and socket.io to allow the communication between devices.
