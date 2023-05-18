@@ -7,7 +7,7 @@ class Stars{
         this.numStars = 100;
         this.maxRadius = (Math.max(this.width, this.height) / this.numStars) * 0.4;
         this.stars = [];
-        this.velocity = 4;
+        this.velocity = this.width * 0.003;
         this.relativeVelocity = this.velocity / this.maxRadius;
     }
 

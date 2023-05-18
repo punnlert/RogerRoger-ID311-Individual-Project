@@ -22,6 +22,7 @@ let themeSong;
 let font;
 let asteroidGroup;
 let screenState;
+let gameEnd;
 let maxTextSize = 0.15 * Math.min(window.innerWidth, window.innerHeight);
 let textSizeDisplay = 0.1 * maxTextSize;
 let IPAddress = "loading..";
@@ -34,6 +35,11 @@ socket.on('connect', (arg) => {
   });
 });
 
+socket.on('data', (data) => {
+  console.log(data);
+  highscore = (data) ? (data) : 0;
+})
+
 function preload(){
   themeSong = loadSound(song);
   font = loadFont(arcadeFont)
@@ -41,22 +47,17 @@ function preload(){
 
 function setup(){
   createCanvas(window.innerWidth, window.innerHeight);
+  gameEnd = false;
   rocket = new Rocket(width / 2, lowerBound, width, height);
   stars = new Stars(width, height);
   asteroidGroup = new AsteroidGroup(width, height);
   score = new ScoreDisplay(font);
   asteroidGroup.subscribeEveryone(rocket, score);
-  // themeSong.play();
-  // themeSong.loop();
+  themeSong.play();
+  themeSong.loop();
   stars.generateStars();
   screenState = 0;
-  socket.emit('load-score', (data) => {
-    try {
-      highscore = data.score;
-    } catch (error) {
-      highscore = 0;
-    }
-  });
+  socket.emit('load-score');
 }
 
 function draw(){
@@ -97,14 +98,16 @@ function draw(){
       fill(BODY);
       text(`score: ${score.getScore()}`, width / 2, height / 2);
       text(`new highscore!`, width / 2, 3 * height / 4);
-      socket.emit('save-score', {score: score.getScore()});
+      if (!gameEnd) {
+        socket.emit('save-score', score.getScore());
+        gameEnd = true;
+      }
     } else {
       textSize(maxTextSize / 2);
       fill(BODY);
-      text(`highscore: ${highscore}`, width / 2, height / 2);
+      text(`highscore: ${(highscore)}`, width / 2, height / 2);
       text(`score: ${score.getScore()}`, width / 2, 3 * height / 4);
     }
-
   }
 }
 
@@ -118,6 +121,7 @@ function keyPressed(){
 
   if (screenState == 2){
     if (key == ' '){
+      gameEnd = false;
       rocket = new Rocket(width / 2, lowerBound, width, height);
       stars = new Stars(width, height);
       asteroidGroup = new AsteroidGroup(width, height);
@@ -125,6 +129,7 @@ function keyPressed(){
       asteroidGroup.subscribeEveryone(rocket, score);
       stars.generateStars();
       screenState = 0;
+      socket.emit('load-score');
     }
   }
 }
@@ -135,6 +140,8 @@ function windowResized(){
   rocket.changeDimension(width, height);
   score.changeDimension(width, height);
   asteroidGroup.changeDimension(width, height);
+
+  maxTextSize = 0.15 * Math.min(window.innerWidth, window.innerHeight);
 }
 
 function animateTextSize(){

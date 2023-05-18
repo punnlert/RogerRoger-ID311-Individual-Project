@@ -58,8 +58,8 @@ function draw(){
   textAlign(CENTER, CENTER);
   fill(BODY_SHADOW);
   text("trajectory control", width / 2, position);
-
-  socket.emit('vertical', [position, height - (height / 5) - 3 * BORDER]);
+  
+  socket.emit('vertical', [position - (2 * BORDER) - height / 20, height - (height / 10) - 3 * BORDER]);
 };
 
 function windowResized(){

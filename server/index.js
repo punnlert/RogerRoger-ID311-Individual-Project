@@ -32,9 +32,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on('save-score', (data) => {
-      fs.writeFile(
-        'leaderboard.json',
-        JSON.stringify(data),
+      fs.writeFile('leaderboard.txt',
+        `${data}`,
         (err, file) => {
           if (err) {throw err};
         }
@@ -42,15 +41,16 @@ io.on('connection', (socket) => {
     })
 
     socket.on('load-score', () => {
-      fs.readFile('leaderboard.json', "utf8", (err, data) => {
+      fs.readFile('leaderboard.txt', "utf8", (err, data) => {
         if (err) {
           console.log(err);
         }
         try {
-          const toSend = JSON.parse(data)
-          io.emit('data', toSend);
+          const toSend = data;
+          console.log(toSend);
+          io.emit('data', (toSend) ? (toSend) : 0);
         } catch (err) {
-          io.emit('data', []);
+          io.emit('data', "oops! an error occured");
         }
       })
     })

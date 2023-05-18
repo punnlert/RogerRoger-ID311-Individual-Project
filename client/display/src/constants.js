@@ -5,7 +5,7 @@ const BODY_HIGHLIGHT = "#C4DB99";
 const ASTEROID_COLOR = "#7895ab";
 const LIVES_COLOR = "#ae3737";
 const FONT = "Helvetica";
-const LIVES = 10;
+const LIVES = 3;
 const NUM_ASTEROID = 10;
 const MAX_VELOCITY = 6;
 

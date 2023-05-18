@@ -10,7 +10,7 @@ class Asteroid extends Subject{
         this.windowHeight = h;
         this.diameter = Math.max(w, h) / (NUM_ASTEROID) + (Math.random() * Math.max(w, h) / (NUM_ASTEROID));
         this.score =  (this.diameter / (Math.max(w, h) / (NUM_ASTEROID))) * 10;
-        this.maxVelocity = MAX_VELOCITY;
+        this.maxVelocity = this.windowWidth * 0.005;
         this.velocity = (this.maxVelocity / 2) + (Math.random() * this.maxVelocity / 2);
         this.color = ASTEROID_COLOR;
         this.hit = false;
@@ -30,8 +30,7 @@ class Asteroid extends Subject{
     }
 
     changeVelocity(delta){
-        this.maxVelocity += delta;
-        console.log(this.maxVelocity);
+        this.maxVelocity = this.maxVelocity * ( 1 + delta / 5);
     }
 
     restartPosition(){

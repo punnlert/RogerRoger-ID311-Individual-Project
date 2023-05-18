@@ -5,7 +5,7 @@ class ScoreDisplay extends Subject{
     constructor(font){
         super();
         this.live = LIVES;
-        this.score = 0;
+        this.score = 100;
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
         this.BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
