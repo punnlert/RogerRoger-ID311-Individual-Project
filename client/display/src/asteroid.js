@@ -1,5 +1,5 @@
 import { Subject } from "./Subject";
-import { NUM_ASTEROID, ASTEROID_COLOR, BACKGROUND, MAX_VELOCITY } from "./constants";
+import { NUM_ASTEROID, ASTEROID_COLOR, BACKGROUND, MAX_VELOCITY, LIVES_COLOR } from "./constants";
 
 class Asteroid extends Subject{
     constructor(x, y, w, h){
@@ -82,12 +82,54 @@ class Asteroid extends Subject{
     }
 }
 
+class Lives extends Asteroid {
+    constructor(x, y, w, h){
+        super(x, y, w, h);
+        this.diameter = this.windowWidth * 0.02;
+        this.color = LIVES_COLOR;
+    }
+
+    restartPosition(){
+        const partitionY = this.windowHeight / NUM_ASTEROID;
+        const posX = this.windowWidth + (Math.random() * 3 * this.windowWidth);
+        const posY = (Math.random() * NUM_ASTEROID) * partitionY;
+
+        this.diameter = this.windowWidth * 0.02;
+        this.velocity = (this.maxVelocity / 2) + (Math.random() * this.maxVelocity / 2);
+        this.x = posX;
+        this.y = posY;
+    }
+
+    update(src, ...other){
+        if (src == "rocketPosition"){
+            const [x, y, w, h] = other;
+
+            if (this.isHit(x, y, w, h) && !this.hit){
+                this.restartPosition();
+                this.notifySubscribers('getLive');
+                this.hit = true;
+            if (!this.isHit(x, y, w, h)) {this.hit = false}
+            }
+        }
+        if (src == "bulletPosition"){
+            const [x, y, w, h] = other;
+
+            if (this.isHit(x, y, w, h) && !this.hit){
+                this.restartPosition();
+                this.hit = true;
+            if (!this.isHit(x, y, w, h)) {this.hit = false}
+            }
+        }
+    }
+}
+
 class AsteroidGroup{
     constructor(w, h){
         this.asteroid = [];
         this.windowWidth = w;
         this.windowHeight = h;
 
+        //make asteroid
         for (let i = 0; i < NUM_ASTEROID; i++){
             const partitionY = this.windowHeight / NUM_ASTEROID;
             const partitionX = this.windowWidth / NUM_ASTEROID;
@@ -96,6 +138,13 @@ class AsteroidGroup{
             const newAsteroid = new Asteroid(posX, posY, w, h);
             this.asteroid.push(newAsteroid);
         }
+
+        //make live
+        const partitionY = this.windowHeight / NUM_ASTEROID;
+        const posX = this.windowWidth + (Math.random() * 4 * this.windowWidth);
+        const posY = (Math.random() * NUM_ASTEROID) * partitionY;
+        const newLive = new Lives(posX, posY, w, h);
+        this.asteroid.push(newLive);
     }
 
     draw(){

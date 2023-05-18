@@ -4,7 +4,8 @@ import { Subject } from "./Subject";
 class ScoreDisplay extends Subject{
     constructor(font){
         super();
-        this.live = LIVES;
+        this.maxLive = LIVES;
+        this.live = this.maxLive;
         this.score = 0;
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
@@ -61,6 +62,9 @@ class ScoreDisplay extends Subject{
         if (src == 'bulletHit'){
             const [ score ] = other;
             this.addScore(Math.floor(score));
+        }
+        if (src == 'getLive'){
+            this.live = (this.live < this.maxLive) ? (this.live + 1) : (this.maxLive);
         }
     }
 

@@ -47,7 +47,6 @@ io.on('connection', (socket) => {
         }
         try {
           const toSend = data;
-          console.log(toSend);
           io.emit('data', (toSend) ? (toSend) : 0);
         } catch (err) {
           io.emit('data', "oops! an error occured");
