@@ -25,7 +25,7 @@ let screenState;
 let gameEnd;
 let maxTextSize = 0.15 * Math.min(window.innerWidth, window.innerHeight);
 let textSizeDisplay = 0.1 * maxTextSize;
-let IPAddress = "loading..";
+let IPAddress = "loading...";
 let highscore;
 
 socket.on('connect', (arg) => {
