@@ -1,6 +1,7 @@
 import { Subject } from "./Subject";
 import { NUM_ASTEROID, ASTEROID_COLOR, BACKGROUND, MAX_VELOCITY, LIVES_COLOR } from "./constants";
 import explosion from '../data/mixkit-arcade-game-explosion-2759.wav';
+import asteroid from '../data/pixil-frame-0.png'
 import astronaut from "../data/jsconfig.png";
 import scream from "../data/Tom and Jerry scream sound effect [TubeRipper.com].mp3"
 
@@ -20,13 +21,14 @@ class Asteroid extends Subject{
         loadSound(explosion, (sound) => {
             this.explosionSound = sound;
         });
+        loadImage(asteroid, (img) => {
+            this.img = img
+        })
     }
 
     draw(){
-        stroke(BACKGROUND);
-        strokeWeight(10);
-        fill(this.color);
-        ellipse(this.x, this.y, this.diameter);
+        imageMode(CENTER);
+        image(this.img, this.x, this.y, this.diameter, this.diameter);
     }
 
     move(){
@@ -97,6 +99,13 @@ class Lives extends Asteroid {
         this.color = LIVES_COLOR;
     }
 
+    draw(){
+        stroke(BACKGROUND);
+        strokeWeight(10);
+        fill(this.color);
+        ellipse(this.x, this.y, this.diameter);
+    }
+
     restartPosition(){
         const partitionY = this.windowHeight / NUM_ASTEROID;
         const posX = this.windowWidth + (Math.random() * 3 * this.windowWidth);
@@ -146,14 +155,15 @@ class Astronauts extends Asteroid{
     }
 
     draw(){
+        imageMode(CENTER);
         image(this.img, this.x, this.y, this.width, this.height);
     }
 
     isHit(x, y, w, h){
-        return (x + w / 2 > this.x
-                && x - w / 2 < this.x + this.width
-                && y + h / 2 > this.y
-                && y - h / 2 < this.y + this.height);
+        return (x + w / 2 > this.x - this.width / 2
+                && x - w / 2 < this.x + this.width / 2
+                && y + h / 2 > this.y - this.height / 2
+                && y - h / 2 < this.y + this.height / 2);
     }
 
     restartPosition(){

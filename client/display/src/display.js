@@ -84,8 +84,8 @@ function draw(){
   }
   if (screenState == 1){
     //bug fix purposes
-    // rocket.changeX(mouseX);
-    // rocket.changeY(mouseY);
+    rocket.changeX(mouseX);
+    rocket.changeY(mouseY);
     rocket.draw();
     asteroidGroup.draw();
     score.draw();
@@ -122,7 +122,7 @@ function draw(){
 //debugging purposes
 function keyPressed(){
   //bug fixes purpose
-  // if (key == 's'){rocket.fire()}
+  if (key == 's'){rocket.fire()}
 
   if (screenState == 0){
     if (key == ' '){
