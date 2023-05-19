@@ -87,4 +87,9 @@ The game use node to host the server, P5JS to draw the graphics, and socket.io t
 
 ## The architecture
 This is the UML of the game code.
+![RogerRogerUML](./images/RogerRogerUML.drawio.png)
 
+## What I would do to make it better
+Right now, the obstacles are extended from the class asteroid. That is not very organized in terms of the readability of the code. So, in the future, I would like to restructure it to have a base class of "hittable" and extends every obstacle from there.
+
+I would also like to add collectibles other than "lives" and "astronaut"; like temporary life extension or gun boost that modify the property of the bullet fired. 
