@@ -5,16 +5,18 @@ import { Stars } from './background';
 import { AsteroidGroup } from './asteroid';
 import { ScoreDisplay } from './scoreboard';
 import { io } from 'socket.io-client';
+import { SpaceObjectFactory } from './asteroid';
 
 
 import arcadeFont from '../data/ARCADE.otf';
 import song from '../data/quin kiu (quinton sung) - OK Computer 8-bit - 03 Subterranean Homesick Alien (8-bit).mp3';
 
 //define variables
-//const socket = io('http://192.168.0.3:3001');
 const socket = io('http://localhost:3001');
 const BORDER = 0.05 * Math.min(window.innerWidth, window.innerHeight);
 const lowerBound = window.innerHeight - BORDER - window.innerHeight / 20;
+
+//global variables for accessibility
 let rocket;
 let stars;
 let score;
@@ -23,6 +25,7 @@ let font;
 let asteroidGroup;
 let screenState;
 let gameEnd;
+let displayAstronaut;
 let maxTextSize = 0.15 * Math.min(window.innerWidth, window.innerHeight);
 let textSizeDisplay = 0.1 * maxTextSize;
 let IPAddress = "loading...";
@@ -35,6 +38,7 @@ socket.on('connect', (arg) => {
   });
 });
 
+//get previous highscore from the server
 socket.on('data', (data) => {
   console.log(data);
   highscore = (data) ? (data) : 0;
@@ -52,6 +56,10 @@ function setup(){
   stars = new Stars(width, height);
   asteroidGroup = new AsteroidGroup(width, height);
   score = new ScoreDisplay(font);
+  displayAstronaut = SpaceObjectFactory.createAstronaut(width, height);
+  displayAstronaut.velocity = 0;
+  displayAstronaut.x = width / 2;
+  displayAstronaut.y = 1.8 * height / 3;
   asteroidGroup.subscribeEveryone(rocket, score);
   themeSong.play();
   themeSong.loop();
@@ -81,11 +89,11 @@ function draw(){
 
     textSize(maxTextSize / 2);
     text("press space", width / 2, 3 * height / 4);
+    
+    displayAstronaut.draw();
+    displayAstronaut.move();
   }
   if (screenState == 1){
-    //bug fix purposes
-    rocket.changeX(mouseX);
-    rocket.changeY(mouseY);
     rocket.draw();
     asteroidGroup.draw();
     score.draw();
@@ -121,9 +129,6 @@ function draw(){
 
 //debugging purposes
 function keyPressed(){
-  //bug fixes purpose
-  if (key == 's'){rocket.fire()}
-
   if (screenState == 0){
     if (key == ' '){
       screenState = 1;

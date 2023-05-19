@@ -1,5 +1,5 @@
 import { Subject } from "./Subject";
-import { NUM_ASTEROID, ASTEROID_COLOR, BACKGROUND, MAX_VELOCITY, LIVES_COLOR } from "./constants";
+import { NUM_ASTEROID, ASTEROID_COLOR, BACKGROUND, LIVES_COLOR } from "./constants";
 import explosion from '../data/mixkit-arcade-game-explosion-2759.wav';
 import asteroid from '../data/pixil-frame-0.png'
 import astronaut from "../data/jsconfig.png";
@@ -150,6 +150,7 @@ class Astronauts extends Asteroid{
         loadSound(scream, (sound) => {
             this.scream = sound;
         })
+        this.angle = 0;
 
         this.score = 100;
     }
@@ -157,6 +158,16 @@ class Astronauts extends Asteroid{
     draw(){
         imageMode(CENTER);
         image(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    move(){
+        if (this.x + this.width / 2 < 0) {
+            this.restartPosition();
+        } else { 
+            this.x -= this.velocity; 
+            this.y += 2 * Math.sin(this.angle);
+            this.angle = (this.angle + PI / 48) % (2*PI);
+        }
     }
 
     isHit(x, y, w, h){
@@ -281,5 +292,6 @@ class AsteroidGroup{
 }
 
 export {
-    AsteroidGroup
+    AsteroidGroup,
+    SpaceObjectFactory
 }
