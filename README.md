@@ -61,9 +61,30 @@ Player navigate through the group of asteroids. if they get hit, their lives dec
 
 To see a clearer picture, you can check my demo on [YouTube](https://youtu.be/GxBwiM4es7w)
 
+## How to start?
+After you clone the repository, you have to go into every folder ```
+/client/display; gun-control; horizontal control; vertical control
+``` and ```/server``` then run ```npm install``` for each one of them.
+
+If you use Visual Studio Code and have a 'Go Live' extension, you can launch the control pages by go into `/client` then click go live.
+
+For the display of the main screen, go into `/client/display` directory and run `npm run dev`
+
+To initiate the server, go into`/server` then run `npx nodemon 'index.js'`
+
+If there is an IP address appearing on your 'display' screen, you are ready to play!
+
+## Highlight
+After finishing all the code, I tried to draw some pixel art to elevate the gaming experience. So, I drew this astronaut and asteroid.
+
+![astronaut](./images/astronaut.png) \
+![asteroid](./images/asteroid.png)
+
+I also learned to postpone the socket.io connection and connect to the input IP (in the [control sections](#the-control-screen)) and I am really proud of it.
+
 ## Software
 The game use node to host the server, P5JS to draw the graphics, and socket.io to allow the communication between devices.
 
-### The architecture
+## The architecture
 This is the UML of the game code.
 
