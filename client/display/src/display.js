@@ -66,6 +66,9 @@ function setup(){
   stars.generateStars();
   screenState = 0;
   socket.emit('load-score');
+
+  //demo
+  noCursor();
 }
 
 function draw(){
@@ -94,6 +97,10 @@ function draw(){
     displayAstronaut.move();
   }
   if (screenState == 1){
+    //demo
+    rocket.changeX(mouseX);
+    rocket.changeY(mouseY);
+
     rocket.draw();
     asteroidGroup.draw();
     score.draw();
@@ -129,6 +136,11 @@ function draw(){
 
 //debugging purposes
 function keyPressed(){
+
+  //demo
+  if (key == 's'){
+    rocket.fire();
+  }
   if (screenState == 0){
     if (key == ' '){
       screenState = 1;
